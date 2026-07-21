@@ -264,7 +264,7 @@ countries = sorted(
 
 col1, col2 = st.columns(2)
 if len(countries) < 2:
-    st.warning("At least two countries are required for comparison.")
+    st.warning("Option is Disabled... because of you checking for single Country")
 else:
     with col1:
        country1 = st.selectbox(
@@ -280,36 +280,35 @@ else:
             index=1,
             key="compare_country2"
         )
+    comparison = compare_countries(
+                  filtered_medals,
+                   country1,
+                    country2
+                )
+
+    st.dataframe(
+        comparison,
+        use_container_width=True,
+        hide_index=True
+    )
+    comparison_chart = comparison.melt(
+        id_vars="Region",
+        var_name="Metric",
+        value_name="Value"
+    )
+
+    fig = px.bar(
+        comparison_chart,
+        x="Metric",
+        y="Value",
+        color="Region",
+        barmode="group",
+        title="Country Comparison"
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
 
-
-comparison = compare_countries(
-    filtered_medals,
-    country1,
-    country2
-)
-
-st.dataframe(
-    comparison,
-    use_container_width=True,
-    hide_index=True
-)
-comparison_chart = comparison.melt(
-    id_vars="Region",
-    var_name="Metric",
-    value_name="Value"
-)
-
-fig = px.bar(
-    comparison_chart,
-    x="Metric",
-    y="Value",
-    color="Region",
-    barmode="group",
-    title="Country Comparison"
-)
-
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
